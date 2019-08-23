@@ -16,14 +16,33 @@ private void Setup()
 private void ApprovalCheck(byte[] connectionData, ulong clientId, MLAPI.NetworkingManager.ConnectionApprovedDelegate callback)
 {
     //Your logic here
-    bool approve = true;
+    bool approve = true; //If approve is true, the connection gets added. If it's false. The client gets disconnected
 
-    ulong? prefabHash = SpawnManager.GetPrefabHashFromGenerator("MyPrefabHashGenerator"); // The prefab hash. Use null to use the default player prefab
+    ulong prefabHash = SpawnManager.GetPrefabHashFromGenerator("Object-hash-string-here"); // The prefab hash of the gameobject you want to spawn. Use null to use the default player prefab
     
-    //If approve is true, the connection gets added. If it's false. The client gets disconnected
-    callback(clientId, prefabHash, approve, positionToSpawnAt, rotationToSpawnWith);
+    bool createPlayerObject = true; //Create player object. If True it spawns the prefabHash, if false it doesn't.
+    
+    callback(createPlayerObject, prefabHash, approve, positionToSpawnAt, rotationToSpawnWith);
 }
 ```
+### Setting up the Player
+When setting up a prefab you must add the Networked Object script to your gameobject. This will give you a string field to set the Hash. 
+
+![Video showing the install process](https://i.imgur.com/TLV1p9j.png)
+
+You must also register the prefab in the Networked Prefabs section under the Networking Manager Script. 
+
+![Video showing the install process](https://i.imgur.com/yOfBRyL.png)
+
+If you tick 'Default Player prefab' you can now change the 'Object-hash-string-here' to your Player object hash.
+
+Before:
+
+    ulong prefabHash = SpawnManager.GetPrefabHashFromGenerator("Object-hash-string-here"); // The prefab hash. Use null to use the default player prefab
+    
+After:
+
+    ulong prefabHash = SpawnManager.GetPrefabHashFromGenerator("Test"); // The prefab hash. Use null to use the default player prefab
 
 
 ### Connection data
